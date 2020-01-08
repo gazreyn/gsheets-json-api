@@ -13,4 +13,7 @@ const result = sheet.getResultsFromRow(2);
 
 // Get results from multiple rows
 const results = sheet.getResultsFromRows([2,3,4]);
+
+// Get results that match a value
+const results = sheet.getResultsBy("id", 3);
 ```
