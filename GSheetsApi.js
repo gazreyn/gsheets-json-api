@@ -1,9 +1,9 @@
 export default class GoogleSheet {
 
-    constructor(urlId, sheetid) {
+    constructor(urlid, sheetid) {
         this.sheet;
         this.columns = {};
-        this.url = `https://spreadsheets.google.com/feeds/cells/${urlId}/${sheetid}/public/full?alt=json`;
+        this.url = `https://spreadsheets.google.com/feeds/cells/${urlid}/${sheetid}/public/full?alt=json`;
     }
 
     fetchSheet() {
@@ -83,6 +83,20 @@ export default class GoogleSheet {
         }
 
         return resultsArray;
+    }
+
+    getResultBy(column, searchTerm) {
+        const sanitizedColumn = (parseInt(column)) ? column.toString() : this.columns[column];
+        
+        // Get all results from the specified column
+        const results = this.sheet.feed.entry.filter((cell) => {
+            return (cell["gs$cell"].col === sanitizedColumn && cell["gs$cell"].row !== "1" && cell.content["$t"] === searchTerm.toString());
+        });
+
+        const rows = results.map(result => { return result["gs$cell"].row; });
+        const resultsObject = this.getResultsFromRows(rows);
+
+        return resultsObject;
     }
 
 }
